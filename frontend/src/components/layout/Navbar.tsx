@@ -10,11 +10,15 @@ export default function Navbar() {
   const pathname = usePathname();
   const { resolvedTheme, setTheme } = useTheme();
 
-  const currentLocale = pathname.startsWith("/en") ? "en" : "zh";
+  const currentLocale = pathname.startsWith("/vi")
+    ? "vi"
+    : pathname.startsWith("/en")
+      ? "en"
+      : "zh";
 
   const switchLocale = (locale: string) => {
     if (locale === currentLocale) return;
-    const rest = pathname.replace(/^\/(zh|en)/, "") || "/";
+    const rest = pathname.replace(/^\/(zh|en|vi)/, "") || "/";
     // 语言切换只替换 locale，保留 Writing 当前 workspace/view 等深链接状态。
     // locale 布局需要重新加载消息资源；完整导航也避免把服务端脚本当作客户端组件渲染。
     window.location.assign(`/${locale}${rest}${window.location.search}`);
@@ -70,6 +74,17 @@ export default function Navbar() {
               }`}
             >
               EN
+            </button>
+            <button
+              onClick={() => switchLocale("vi")}
+              aria-pressed={currentLocale === "vi"}
+              className={`min-h-9 rounded-md px-2.5 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 ${
+                currentLocale === "vi"
+                  ? "bg-accent text-accent-foreground shadow-sm"
+                  : "text-muted hover:text-foreground"
+              }`}
+            >
+              VI
             </button>
           </div>
 
